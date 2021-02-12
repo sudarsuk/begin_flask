@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | {{ vendor }}</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="/favicon.png">
+  <link rel="stylesheet" href="https://uselooper.com/assets/stylesheets/theme.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+  <style>
+    .tugrik::after {
+      content: "₮";
+    }
+  </style>
+</head>
+<body>
+  #: header
+  <header class="app-header app-header-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-lg-0" style="min-height:3.5rem">
+      <div class="container">
+        #:2 brand
+        {% if request.path.startswith('/admin') %}
+          <a class="navbar-brand" href="/admin">
+            Admin
+          </a>
+        {% else %}
+          <a class="navbar-brand" href="/manager">
+            Manager
+          </a>
+        {% endif %}
+        <div class="collapse navbar-collapse">
+          #:2 left links
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            {% if request.path.startswith('/admin') %}
+              <li class="nav-item">
+                <a class="nav-link" href="/admin">Захиалгууд</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/order/list-finished">Хүргэгдсэн захиалгууд</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/product/list">Бараанууд</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/config">Тохиргоо</a>
+              </li>
+            {% endif %}
+          </ul>
+
+          #:2 right links
+          <ul class="navbar-nav mt-2 mt-lg-0 text-right">
+            <a class="nav-link" href="/" target="_blank">
+              Веб сайтыг харах
+              <i class="fas fa-external-link-alt"></i>
+            </a>
+            {% if request.path.startswith('/admin') %}
+              <a class="nav-link" href="/admin?out">Logout</a>
+            {% else %}
+              <a class="nav-link" href="/manager?out">Logout</a>
+            {% endif %}
+          </ul>
+          #:endfold2
+        </div>
+      </div>
+    </nav>
+  </header>
+  #:endfold
+
+  <div class="app-main">
+    {% for m in get_flashed_messages() %}
+      <div class="page-message" role="alert">
+        <span class="mr-1">{{ m }}</span>
+        <a href="#" class="btn btn-sm btn-icon btn-warning" aria-label="Close" onclick="$(this).parent().fadeOut()">
+          <span aria-hidden="true"><i class="fa fa-times"></i></span>
+        </a>
+      </div>
+    {% endfor %}
+    <div class="container mt-3">
+      {% block content %} {% endblock %}
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-text-mask@5.1.1/dist/vanillaTextMask.min.js"></script>
+  <script src="https://uselooper.com/assets/javascript/theme.js"></script>
+  {% block bottom %} {% endblock %}
+</body>
+</html>

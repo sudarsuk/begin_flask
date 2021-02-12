@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | {{ vendor }}</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="/favicon.png">
+  <link rel="stylesheet" href="https://uselooper.com/assets/stylesheets/theme.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-touchspin/4.3.0/jquery.bootstrap-touchspin.min.js"></script>
+  <script src="https://uselooper.com/assets/javascript/theme.js"></script>
+  <style>
+    .carousel-indicators li {
+      width: 5px;
+      height: 5px;
+      border-radius: 100%;
+    }
+    .tugrik::after {
+      content: "₮";
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form method="post" action="" class="row">
+      <div class="col-sm-12 offset-lg-2 col-lg-8">
+        #: Logo
+        <div class="card p-2 mt-3">
+          <a href="/" class="text-center">
+            <img style="width:80%" src="{{ logo_url }}">
+          </a>
+        </div>
+        #:endfold
+
+        {% block content %} {% endblock %}
+      </div>
+    </form>
+  </div>
+
+  {% block bottom %} {% endblock %}
+</body>
+</html>

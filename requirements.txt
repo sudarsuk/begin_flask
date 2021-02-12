@@ -1,0 +1,8 @@
+Flask
+pyyaml
+peewee
+psycopg2-binary
+XlsxWriter
+boto3
+# production deploy
+gunicorn
