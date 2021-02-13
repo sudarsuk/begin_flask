@@ -10,7 +10,7 @@ import utils as fn
 if sys.platform == "darwin":
     params = {
         "user": "postgres",
-        "database": "online-orders",
+        "database": "minu-devter",
         "password": "",
         "host": "localhost"
     }
@@ -30,34 +30,12 @@ class Model(peewee.Model):
 
 
 # Models
-class Order(Model):
-    data_json = peewee.TextField()
-
-    name = peewee.CharField(null=True)
-    phone = peewee.CharField(null=True)
-    address = peewee.TextField(null=True)
-
-    status = peewee.CharField()  # CREATED, CONFIRMED, PAID, FINISHED
-
-    updated_at = peewee.DateTimeField(null=True)
-    created_at = peewee.DateTimeField(default=datetime.datetime.now)
-
-    class Meta:
-        table_name = "%s--order" % fn.config["site"]
-
-    def save(self, *args, **kwargs):
-        if self.id:
-            self.updated_at = datetime.datetime.now()
-        return super(Order, self).save(*args, **kwargs)
-
-
 class Product(Model):
     DRAFT, ACTIVE = 0, 1
 
     title = peewee.CharField()
     description = peewee.TextField()
     price = peewee.IntegerField()
-    image_url_list = peewee.TextField()
 
     status = peewee.IntegerField()
 
@@ -65,7 +43,7 @@ class Product(Model):
     created_at = peewee.DateTimeField(default=datetime.datetime.now)
 
     class Meta:
-        table_name = "%s--product" % fn.config["site"]
+        table_name = "devter"
 
     def save(self, *args, **kwargs):
         if self.id:
@@ -73,35 +51,4 @@ class Product(Model):
         return super(Product, self).save(*args, **kwargs)
 
 
-class Data(Model):
-    name = peewee.CharField()
-    value = peewee.TextField()
-
-    updated_at = peewee.DateTimeField(null=True)
-    created_at = peewee.DateTimeField(default=datetime.datetime.now)
-
-    class Meta:
-        table_name = "%s--data" % fn.config["site"]
-
-    @classmethod
-    def fetch(cls, name, default=None):
-        item = cls.get_or_none(cls.name == name)
-        if item:
-            return json.loads(item.value)
-        return default
-
-    @classmethod
-    def write(cls, name, value):
-        item = cls.get_or_none(cls.name == name) or cls(name=name)
-        item.value = json.dumps(value)
-        item.updated_at = datetime.datetime.now()
-        item.save()
-
-    @classmethod
-    def erase(cls, name):
-        item = cls.get_or_none(cls.name == name)
-        if item:
-            item.delete_instance()
-
-
-postgres_db.create_tables([Order, Product, Data])
+postgres_db.create_tables([Product])

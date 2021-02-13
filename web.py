@@ -8,6 +8,8 @@ import yaml
 import flask as x
 import utils as fn
 
+import models as db
+
 # Configuration
 logging.root.level = logging.INFO
 
@@ -31,6 +33,20 @@ def before_request():
         return x.redirect("/admin")
 
     return
+
+
+# reset
+@app.route("/reset")
+def my_reset():
+    new_data = db.Product()
+    new_data.title = "Түм"
+    new_data.price = 10000
+    new_data.description = "Ахуй хэрэглээний бараа"
+    new_data.status = db.Product.ACTIVE
+    new_data.save()
+    neg = db.Product.select().count()
+    return f"this is {neg}"
+    # return 'reset'
 
 
 # main
