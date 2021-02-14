@@ -15,39 +15,10 @@
         <div class="card">
           <div class="card-body">
             <div class="text-center">
-              <div id="product_{{ p.id }}" class="carousel slide" data-interval="false">
-                {% set image_url_list = json.loads(p.image_url_list) %}
-
-                {% if image_url_list|length == 0 %}
-                  <img style="height:250px" src="https://via.placeholder.com/175x250.png?text=No+Image">
-                {% elif image_url_list|length == 1 %}
-                  <img style="height:250px" src="{{ image_url_list[0] }}">
-                {% else %}
-                  <ol class="carousel-indicators">
-                    {% for image_url in image_url_list %}
-                      <li data-slide-to="{{ loop.index0 }}"></li>
-                    {% endfor %}
-                  </ol>
-                  <div class="carousel-inner" role="listbox">
-                    {% for image_url in image_url_list %}
-                      <div class="carousel-item {{- ' active' if loop.index == 1 }}">
-                        <img style="height:250px" src="{{ image_url }}">
-                      </div>
-                    {% endfor %}
-                  </div>
-                  <a class="carousel-control-prev" href="#product_{{ p.id }}" role="button" data-slide="prev">
-                    <span><i class="fa fa-angle-left" aria-hidden="true" style="font-size: 40px; text-shadow: 2px 2px 3px #000000;"></i></span>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                  <a class="carousel-control-next" href="#product_{{ p.id }}" role="button" data-slide="next">
-                    <span><i class="fa fa-angle-right" aria-hidden="true" style="font-size: 40px; text-shadow: 2px 2px 3px #000000;"></i></span>
-                    <span class="sr-only">Next</span>
-                  </a>
-                {% endif %}
-              </div>
+              
             </div>
             <div class="font-weight-bold text-center text-truncate mt-3 mb-3">{{ p.title }}</div>
-            <div class="font-weight-bold text-center text-danger mb-3 tugrik">{{ fmt_price(p.price) }}</div>
+            <div class="font-weight-bold text-center text-danger mb-3 tugrik">{{ p.price }}</div>
             <div class="mb-3">
               {{ p.description }}
             </div>
@@ -61,9 +32,6 @@
   </div>
   #:endfold
 
-  <div class="border-top pt-3 mb-5">
-    <button data-selector="continue" class="btn btn-primary btn-lg btn-block" type="submit" disabled>Үргэлжлүүлэх</button>
-  </div>
 {% endblock %}
 
 

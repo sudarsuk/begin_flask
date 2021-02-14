@@ -52,7 +52,9 @@ def my_reset():
 # main
 @app.route("/", methods=["GET", "POST"])
 def index():
-    return "Hello Sudar congratulations"
+    product_list = db.Product.select()
+
+    return x.render_template('index.html', **locals())
 
 # static
 @app.route("/favicon.ico")
