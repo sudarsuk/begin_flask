@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Нэвтрэх</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon-precomposed" href="/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css">
+  <style>
+    .form-signin {
+      width: 100%;
+      max-width: 330px;
+      padding: 15px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body class="text-center bg-light">
+  <div class="container mt-5">
+    <form class="form-signin" method="post">
+      <input type="password" name="password" class="form-control {{- ' is-invalid' if error }}" placeholder="Нууц үг" required autofocus>
+      <input type="hidden" name="action" value="login">
+      <input type="text" class="d-none" name="user">
+      <button class="btn btn-info btn-block mt-3" type="submit">Login as admin</button>
+    </form>
+  </div>
+</body>
+</html>

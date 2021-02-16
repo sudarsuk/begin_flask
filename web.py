@@ -10,6 +10,7 @@ import utils as fn
 
 import models as db
 
+
 # Configuration
 logging.root.level = logging.INFO
 
@@ -27,34 +28,74 @@ def before_request():
     # check not admin page
     if not x.request.path.startswith("/admin/"):
         return
-
     # check login
     if time.time() - x.session.get("admin_logged", 0) > 24 * 3600:
         return x.redirect("/admin")
 
     return
 
+@app.context_processor
+def context_processor():
+    return {
+        "vendor": fn.config["vendor"],
+    }
 
-# reset
+@app.route('/admin', methods=["GET", "POST"])
+def admin_pages():
+    print(x.request.args, '  request.args')
+    # logout
+    if "out" in x.request.args:
+        x.session.pop("admin_logged", "")
+        return x.redirect("/")
+
+    if x.request.method == "POST" and x.request.form["action"] == "login":
+        if x.request.form["password"] == fn.config["admin_password"]:
+            x.session["admin_logged"] = int(time.time())
+            return x.redirect('/admin')
+
+        return x.render_template('admin/login.html', error=True)
+
+    if time.time() - x.session.get("admin_logged", 0) > 24 * 3600:
+        return x.render_template("admin/login.html")
+
+    return x.render_template('admin/admin.html')
+
 @app.route("/reset")
-def my_reset():
-    new_data = db.Product()
-    new_data.title = "Түм"
-    new_data.price = 10000
-    new_data.description = "Ахуй хэрэглээний бараа"
-    new_data.status = db.Product.ACTIVE
-    new_data.save()
-    neg = db.Product.select().count()
-    return f"this is {neg}"
-    # return 'reset'
+def reset():
+    if x.request.host != "127.0.0.1:5000":
+        return x.abort(404)
+
+    res = "<pre>"
+    # delete tables
+    cur = db.postgres_db.cursor()
+    cur.execute("SELECT TABLENAME FROM pg_tables where schemaname='public'")
+    for t in cur.fetchall():
+        cur.execute('DROP TABLE "%s"' % t)
+    db.postgres_db.commit()
+
+    db.postgres_db.create_tables([db.Product])
+
+    # import yaml
+    # with open(".site") as f:
+    #     site = f.read().strip()
+    # with open("site--%s/config.yaml" % site) as f:
+    #     product_list = yaml.safe_load(f)["product_list"]
+
+    # product_list_copy = []
+    # for p in product_list:
+    #     product_list_copy.append(p.copy())
+    #     product_list_copy[-1].pop("code")
+    #     product_list_copy[-1]["status"] = db.Product.ACTIVE
+    # db.Product.insert_many(product_list_copy).execute()
+
+    # res += "[+] Create model: Product: (%s)\n" % db.Product.select().count()
+    return 'reset'
 
 
 # main
 @app.route("/", methods=["GET", "POST"])
 def index():
-    product_list = db.Product.select()
-
-    return x.render_template('index.html', **locals())
+    return x.render_template('login.html')
 
 # static
 @app.route("/favicon.ico")
